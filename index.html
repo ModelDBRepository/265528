@@ -1,0 +1,46 @@
+<html>
+  <p>The (neurolib) code for the paper:</p>
+  <p>Cakan C, Obermayer K (2020) Biophysically grounded mean-field models of neural populations under electrical stimulation. PLoS Comput Biol 16:e1007822<br/>
+  doi: <a href="http://dx.doi.org/10.1371/journal.pcbi.1007822">10.1371/journal.pcbi.1007822</a></p>
+  <p>is available at the author's GitHub repository with the latest updates and instructions on how to install at <a href="https://github.com/neurolib-dev/neurolib">https://github.com/neurolib-dev/neurolib</a> 
+</p>
+<p># Introduction
+</p>
+<p>neurolib is a Python framework for easy whole-brain neural mass modeling. It allows you to build, simulate, and optimize your own state-of-the-art whole-brain models. To simulate the neural activity of each brain area, the main implementation provides an advanced neural mass mean-field model of spiking adaptive exponential integrate-and-fire neurons (AdEx) in the form of a linear-nonlinear cascade model called aln. 
+</p>
+<p>For a thorough analysis of the aln model, please refer to our paper "Biophysically grounded mean-field models of neural populations under electrical stimulation. Cakan et al. (2020). PLOS Computational Biology"
+</p>
+<p>The adaptive linear-nonlinear (aln) cascade model is a low-dimensional population model of spiking neural networks. Mathematically, it is a dynamical system of non-linear ordinary differential equations (ODEs). The dynamical variables of the system simulated in the aln model describe the average firing rate and other macroscopic variables of a randomly connected, delay-coupled network of excitatory and inhibitory adaptive exponential integrate-and-fire neurons (AdEx) with non-linear synaptic currents.
+</p>
+<p>Ultimately, the model is a result of various steps of model reduction starting from the Fokker-Planck equation of the AdEx neuron subject to white noise input with different mean 
+&Acirc;&micro; and variance s. The resulting steady-state firing rates r and the linear response function of the neural population are then stored in a lookup table. When we finally simulate the system, these precomputed quantities serve as the linear filter and the nonlinear firing rate transfer function r = F(&Acirc;&micro;,s) as a system of ODEs with an adaptive timescale t, hence the name adaptive linear-nonlinear (aln) cascade.
+</p>
+<p># Simulating a single node
+</p>
+<p>The following Python code is a brief demonstration on how to simulate a single aln node. A introductory tutorial on how to use the framework can be found at <a href="https://caglorithm.github.io/notebooks/neurolib-intro/">https://caglorithm.github.io/notebooks/neurolib-intro/</a> 
+</p>
+<p>To create a single node, we instantiate the model without any arguments.
+</p>
+<p>```<br/>
+# Let's import the aln model<br/>
+from neurolib.models.aln import ALNModel
+</p>
+<p># Create the model<br/>
+aln = ALNModel()
+</p>
+<p># Each model comes with a set of default parameters which are a dictionary. 
+# Let's change the parameter that controls the duration of a simulation to 10s.
+aln.params['duration'] = 10.0 * 1000  
+</p>
+<p># For convenience, we could also use:<br/>
+aln.params.duration = 10.0 * 1000
+</p>
+<p># In the aln model an Ornstein-Uhlenbeck process is simulated in parallel
+# as the source of input noise fluctuations. Here we can set the variance
+# of the process. <br/>
+# Let's add some noise.<br/>
+aln.params['sigma_ou'] = 0.1
+</p>
+<p># Finally, we run the model<br/>
+aln.run()</p>
+</html>
